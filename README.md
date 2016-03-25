@@ -5,10 +5,10 @@ Borui Xia (github id: kevinrossxia)
 Nan Song
 Yiming Wang （github id: wainy)
 Project description:
-Our project is to make a 3D chess game. people can choose to play with computer or to play with another people. 
-When people playing with compter, the computer may move randomly until the move is lagal. 
+Our project is to make a 3D chess game. people can choose to play with the computer or to play with another people. 
+When people are playing with the computer, it may move randomly until the move is legal. 
 In this game, player can change the view of game.
-the following are some class:
+the following are some classes:
 package chess;
 
 public class chess {
@@ -20,7 +20,7 @@ public class chess {
 		// the players move pieces
 	}
     public class computerplay{
-		//computer move pieces randomly but need judge whether is legal
+		//computer move pieces randomly but need to judge whether the move is legal
 	}
 	public class chessrule{
 		//the rule of chess pieces,to make sure a move is legal or not
