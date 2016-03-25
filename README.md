@@ -3,7 +3,7 @@ Project: Graphical Game
 Group:
 Borui Xia (github id: kevinrossxia)
 Nan Song
-Yiming Wang
+Yiming Wang （github id: wainy)
 Project description:
 Our project is to make a 3D chess game. people can choose to play with computer or to play with another people. 
 When people playing with compter, the computer may move randomly until the move is lagal. 
