@@ -167,7 +167,7 @@ public final class Table extends Observable {
                 JFileChooser chooser = new JFileChooser();
                 int option = chooser.showOpenDialog(Table.get().getGameFrame());
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    //loadPGNFile(chooser.getSelectedFile());
+                    //To do more work to load game
                 }
             }
         });
@@ -190,7 +190,7 @@ public final class Table extends Observable {
                 });
                 final int option = chooser.showSaveDialog(Table.get().getGameFrame());
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    //savePGNFile(chooser.getSelectedFile());
+                    //To do more work to save game
                 }
             }
         });
@@ -316,23 +316,6 @@ public final class Table extends Observable {
         Table.get().getBoardPanel().drawBoard(chessBoard);
     }
 
-//    static void loadPGNFile(final File pgnFile) {
-//        try {
-//        	
-//        }
-//        catch (final IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private static void savePGNFile(final File pgnFile) {
-//        try {
-//
-//        }
-//        catch (final IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void undoLastMove() {
         final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
