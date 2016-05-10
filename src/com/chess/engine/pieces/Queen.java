@@ -12,7 +12,7 @@ import com.chess.engine.board.Move.MajorAttackMove;
 import com.chess.engine.board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import org.magicwerk.brownies.collections.GapList;
-
+// queen piece same as bishop
 public final class Queen extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -9, -8, -7, -1, 1,
@@ -64,16 +64,6 @@ public final class Queen extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
-    }
-
-    @Override
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
-    }
-
-    @Override
-    public int locationBonus() {
-        return this.pieceAlliance.queenBonus(this.piecePosition);
     }
 
     @Override

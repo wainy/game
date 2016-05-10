@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-
+//there are some useful constant in board
 public final class BoardUtils {
 
-    public static final boolean[] FIRST_COLUMN = initColumn(0);
+    public static final boolean[] FIRST_COLUMN = initColumn(0);//all first column return true, others are false, following are same;
     public static final boolean[] SECOND_COLUMN = initColumn(1);
     public static final boolean[] THIRD_COLUMN = initColumn(2);
     public static final boolean[] FOURTH_COLUMN = initColumn(3);
@@ -23,10 +23,14 @@ public final class BoardUtils {
     public static final boolean[] SIXTH_ROW = initRow(40);
     public static final boolean[] SEVENTH_ROW = initRow(48);
     public static final boolean[] EIGHTH_ROW = initRow(56);
-
+    
+    //Notation of the position on board;
     public static final String[] ALGEBRAIC_NOTATION = initializeAlgebraicNotation();
+    
+    //Notation of the position to coordinate(int);
     public static final Map<String, Integer> POSITION_TO_COORDINATE = initializePositionToCoordinateMap();
-
+    
+    //just for easy to change
     public static final int START_TILE_INDEX = 0;
     public static final int NUM_TILES_PER_ROW = 8;
     public static final int NUM_TILES = 64;
@@ -34,7 +38,9 @@ public final class BoardUtils {
     private BoardUtils() {
         throw new RuntimeException("Not Instantiable!");
     }
-
+    
+    
+    //function to make the column constant
     private static boolean [] initColumn(int columnNumber) {
         final boolean[] column = new boolean[NUM_TILES];
         do {
@@ -43,7 +49,7 @@ public final class BoardUtils {
         } while(columnNumber < NUM_TILES);
         return column;
     }
-
+    //function to make the row constant
     private static boolean [] initRow(int rowNumber) {
         final boolean[] row = new boolean[NUM_TILES];
         do {
@@ -52,7 +58,8 @@ public final class BoardUtils {
         } while(rowNumber % NUM_TILES_PER_ROW != 0);
         return row;
     }
-
+    
+    //pair the table position string and position;
     private static Map<String, Integer> initializePositionToCoordinateMap() {
         final Map<String, Integer> positionToCoordinate = new HashMap<>();
         for (int i = START_TILE_INDEX; i < NUM_TILES; i++) {
@@ -60,7 +67,8 @@ public final class BoardUtils {
         }
         return ImmutableMap.copyOf(positionToCoordinate);
     }
-
+    
+    //represent the table position to string 
     private static String[] initializeAlgebraicNotation() {
         return new String[] {
                 "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
@@ -85,11 +93,13 @@ public final class BoardUtils {
     public static String getPositionAtCoordinate(final int coordinate) {
         return ALGEBRAIC_NOTATION[coordinate];
     }
-
+    
+    //check whether there is a check on board
     public static boolean isThreatenedBoard(final Board board) {
-        return board.whitePlayer().isInCheck() || board.blackPlayer().getOpponent().isInCheck();
+        return board.whitePlayer().isInCheck() || board.whitePlayer().getOpponent().isInCheck();
     }
-
+    
+    //check whether the game is end
     public static boolean isEndGame(final Board board) {
         return board.whitePlayer().isInCheckMate() || board.blackPlayer().isInCheckMate() ||
                board.whitePlayer().isInStaleMate() || board.blackPlayer().isInStaleMate();

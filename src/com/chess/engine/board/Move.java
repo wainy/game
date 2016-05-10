@@ -5,14 +5,19 @@ import com.chess.engine.pieces.Pawn;
 import com.chess.engine.pieces.Piece;
 import com.chess.engine.pieces.Rook;
 import com.chess.engine.pieces.Piece.PieceType;
-
+/*this class is about the move on the board
+ include some special case of piece move on board: like castling, En passant, promotion
+ https://en.wikipedia.org/wiki/Castling;
+ https://en.wikipedia.org/wiki/En_passant;
+https://en.wikipedia.org/wiki/Promotion_(chess); we just do this to queen
+ */
 public abstract class Move {
 
     protected final Board board;
     protected final int destinationCoordinate;
     protected final Piece movedPiece;
     protected final boolean isFirstMove;
-
+    //null move, do nothing
     public static final Move NULL_MOVE = new NullMove();
 
     private Move(final Board board,
@@ -83,7 +88,9 @@ public abstract class Move {
     public Piece getAttackedPiece() {
         return null;
     }
-
+    
+    
+    //execute move on board and return a new board
     public Board execute() {
         final Board.Builder builder = new Builder();
         for (final Piece piece : this.board.currentPlayer().getActivePieces()) {
@@ -95,10 +102,13 @@ public abstract class Move {
             builder.setPiece(piece);
         }
         builder.setPiece(this.movedPiece.movePiece(this));
+        
+        // get the alliance about the who make this move
         builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
-
+    
+    //undo 
     public Board undo() {
         final Board.Builder builder = new Builder();
         for (final Piece piece : this.board.getAllPieces()) {
@@ -107,17 +117,19 @@ public abstract class Move {
         builder.setMoveMaker(this.board.currentPlayer().getAlliance());
         return builder.build();
     }
-
-    public String disambiguationFile() {
-        for(final Move move : this.board.currentPlayer().getLegalMoves()) {
-            if(move.getDestinationCoordinate() == this.destinationCoordinate && !this.equals(move) &&
-               this.movedPiece.getPieceType().equals(move.getMovedPiece().getPieceType())) {
-                return BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()).substring(0, 1);
-            }
-        }
-        return "";
-    }
-
+    
+//    //different move but have the same location
+//    public String disambiguationFile() {
+//        for(final Move move : this.board.currentPlayer().getLegalMoves()) {
+//            if(move.getDestinationCoordinate() == this.destinationCoordinate && !this.equals(move) &&
+//               this.movedPiece.getPieceType().equals(move.getMovedPiece().getPieceType())) {
+//                return BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition());
+//            }
+//        }
+//        return "";
+//    }
+    
+    //enum class to check whether this move is done;
     public enum MoveStatus {
 
         DONE {
@@ -142,9 +154,10 @@ public abstract class Move {
         public abstract boolean isDone();
 
     }
-
-    public static class PawnPromotion
-            extends Move {
+    
+    
+    // this is class about the promotion move of the pawn
+    public static class PawnPromotion extends Move {
 
         final Move decoratedMove;
         final Pawn promotedPawn;
@@ -194,12 +207,14 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()) + "-" +
+            return PieceType.PAWN+": "+BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()) + "-" +
                     BoardUtils.getPositionAtCoordinate(this.destinationCoordinate) + "=" + PieceType.QUEEN;
         }
 
     }
-
+    
+    //two move: major move and attack move
+    // child class MajorMove of Move
     public static class MajorMove extends Move {
 
         public MajorMove(final Board board,
@@ -215,11 +230,54 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return movedPiece.getPieceType().toString() + disambiguationFile() +
+            return movedPiece.getPieceType().toString() +": "+ BoardUtils.getPositionAtCoordinate(this.getCurrentCoordinate()) +"-"+
                     BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
+    
+    // attack move
+    public static abstract class AttackMove extends Move {
+
+        private final Piece attackedPiece;
+
+        AttackMove(final Board board,
+                   final Piece pieceMoved,
+                   final int destinationCoordinate,
+                   final Piece pieceAttacked) {
+            super(board, pieceMoved, destinationCoordinate);
+            this.attackedPiece = pieceAttacked;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.attackedPiece.hashCode() + super.hashCode();
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof AttackMove)) {
+                return false;
+            }
+            final AttackMove otherAttackMove = (AttackMove) other;
+            return super.equals(otherAttackMove) && getAttackedPiece().equals(otherAttackMove.getAttackedPiece());
+        }
+
+        @Override
+        public Piece getAttackedPiece() {
+            return this.attackedPiece;
+        }
+
+        @Override
+        public boolean isAttack() {
+            return true;
+        }
+
+    }
+    
 
     public static class MajorAttackMove extends AttackMove {
 
@@ -238,11 +296,12 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return movedPiece.getPieceType() + disambiguationFile() + "x" +
+            return movedPiece.getPieceType() +": "+ BoardUtils.getPositionAtCoordinate(this.getCurrentCoordinate()) + "x" +
                     BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
+    
 
     public static class PawnMove extends Move {
 
@@ -258,7 +317,8 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
+            return PieceType.PAWN+": "+BoardUtils.getPositionAtCoordinate(this.getCurrentCoordinate())+
+            		"-"+BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
@@ -279,12 +339,12 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()).substring(0, 1) + "x" +
+            return PieceType.PAWN+": "+BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()) + "x" +
                     BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
-    //https://en.wikipedia.org/wiki/En_passant
+    
     public static class PawnEnPassantAttack extends PawnAttackMove {
 
         public PawnEnPassantAttack(final Board board,
@@ -328,8 +388,7 @@ public abstract class Move {
 
     }
     //Pawn first move
-    public static class PawnJump
-            extends Move {
+    public static class PawnJump extends Move {
 
         public PawnJump(final Board board,
                         final Pawn pieceMoved,
@@ -362,7 +421,8 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
+            return PieceType.PAWN+": "+BoardUtils.getPositionAtCoordinate(this.getCurrentCoordinate())+
+            		"-"+BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
@@ -403,7 +463,6 @@ public abstract class Move {
                 }
             }
             builder.setPiece(this.movedPiece.movePiece(this));
-            //calling movePiece here doesn't work, we need to explicitly create a new Rook
             builder.setPiece(new Rook(this.castleRook.getPieceAllegiance(), this.castleRookDestination, false));
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
             return builder.build();
@@ -431,6 +490,7 @@ public abstract class Move {
         }
 
     }
+    
     //King side castling
     public static class KingSideCastleMove extends CastleMove {
 
@@ -494,50 +554,9 @@ public abstract class Move {
 
     }
 
-    public static abstract class AttackMove
-            extends Move {
 
-        private final Piece attackedPiece;
-
-        AttackMove(final Board board,
-                   final Piece pieceMoved,
-                   final int destinationCoordinate,
-                   final Piece pieceAttacked) {
-            super(board, pieceMoved, destinationCoordinate);
-            this.attackedPiece = pieceAttacked;
-        }
-
-        @Override
-        public int hashCode() {
-            return this.attackedPiece.hashCode() + super.hashCode();
-        }
-
-        @Override
-        public boolean equals(final Object other) {
-            if (this == other) {
-                return true;
-            }
-            if (!(other instanceof AttackMove)) {
-                return false;
-            }
-            final AttackMove otherAttackMove = (AttackMove) other;
-            return super.equals(otherAttackMove) && getAttackedPiece().equals(otherAttackMove.getAttackedPiece());
-        }
-
-        @Override
-        public Piece getAttackedPiece() {
-            return this.attackedPiece;
-        }
-
-        @Override
-        public boolean isAttack() {
-            return true;
-        }
-
-    }
-
-    public static class NullMove
-            extends Move {
+    //create a null move;
+    public static class NullMove extends Move {
 
         private NullMove() {
             super(null, -1);

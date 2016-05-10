@@ -13,7 +13,7 @@ import com.chess.engine.board.Move.QueenSideCastleMove;
 import com.chess.engine.pieces.Piece;
 import com.chess.engine.pieces.Rook;
 import com.google.common.collect.ImmutableList;
-
+//white player as black player
 public final class WhitePlayer extends Player {
 
     public WhitePlayer(final Board board,

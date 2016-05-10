@@ -6,6 +6,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 
+// this is the parent class of all piece, include bishop,king,knight,queen,rook,queen
 public abstract class Piece {
 
     protected final PieceType pieceType;
@@ -68,10 +69,16 @@ public abstract class Piece {
         result = 31 * result + (isFirstMove ? 1 : 0);
         return result;
     }
-
+    
+    //get the move piece
+    public abstract Piece movePiece(Move move);
+    
+    // get all legal moves about this piece on board
+    public abstract Collection<Move> calculateLegalMoves(final Board board);
+    
     public enum PieceType {
 
-        PAWN(100, "P") {
+        PAWN("P") {
             @Override
             public boolean isPawn() {
                 return true;
@@ -87,7 +94,7 @@ public abstract class Piece {
                 return false;
             }
         },
-        KNIGHT(320, "N") {
+        KNIGHT("N") {
             @Override
             public boolean isPawn() {
                 return false;
@@ -103,7 +110,7 @@ public abstract class Piece {
                 return false;
             }
         },
-        BISHOP(330, "B") {
+        BISHOP("B") {
             @Override
             public boolean isPawn() {
                 return false;
@@ -119,7 +126,7 @@ public abstract class Piece {
                 return false;
             }
         },
-        ROOK(500, "R") {
+        ROOK("R") {
             @Override
             public boolean isPawn() {
                 return false;
@@ -135,7 +142,7 @@ public abstract class Piece {
                 return false;
             }
         },
-        QUEEN(900, "Q") {
+        QUEEN("Q") {
             @Override
             public boolean isPawn() {
                 return false;
@@ -151,7 +158,7 @@ public abstract class Piece {
                 return false;
             }
         },
-        KING(10000, "K") {
+        KING("K") {
             @Override
             public boolean isPawn() {
                 return false;
@@ -168,20 +175,17 @@ public abstract class Piece {
             }
         };
 
-        private final int value;
+  
         private final String pieceName;
 
-        public int getPieceValue() {
-            return this.value;
-        }
+
 
         @Override
         public String toString() {
             return this.pieceName;
         }
 
-        PieceType(final int val, final String pieceName) {
-            this.value = val;
+        PieceType(final String pieceName) {
             this.pieceName = pieceName;
         }
 
@@ -190,13 +194,5 @@ public abstract class Piece {
         public abstract boolean isKing();
         
     }
-    
-    public abstract int getPieceValue();
-
-    public abstract int locationBonus();
-
-    public abstract Piece movePiece(Move move);
-
-    public abstract Collection<Move> calculateLegalMoves(final Board board);
 
 }

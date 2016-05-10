@@ -1,7 +1,7 @@
 package com.chess.engine.board;
 
 import com.chess.engine.board.Move.MoveStatus;
-
+//this class is to store the move status and move and the transition board;
 public final class MoveTransition {
 
     private final Board transitionBoard;
@@ -23,4 +23,8 @@ public final class MoveTransition {
     public MoveStatus getMoveStatus() {
         return this.moveStatus;
     }
+
+	public Move getMove() {
+		return move;
+	}
 }

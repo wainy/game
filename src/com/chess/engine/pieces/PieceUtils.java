@@ -5,7 +5,7 @@ import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
-
+//some useful function about the piece
 public class PieceUtils {
 
     public static final Table<Alliance, Integer, Queen> ALL_POSSIBLE_QUEENS = PieceUtils.createAllPossibleMovedQueens();
@@ -17,7 +17,8 @@ public class PieceUtils {
     private PieceUtils() {
         throw new RuntimeException("Not instantiable!");
     }
-
+    
+    // this move will return a pawn at destination coordinate;
     static Pawn getMovedPawn(final Move move) {
         return PieceUtils.ALL_POSSIBLE_PAWNS.get(move.getMovedPiece().getPieceAllegiance(), move.getDestinationCoordinate());
     }

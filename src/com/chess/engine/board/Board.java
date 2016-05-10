@@ -17,15 +17,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.magicwerk.brownies.collections.GapList;
 
+//This class is about the board section
 public final class Board {
 
-    private final List<Tile> gameBoard;
-    private final Collection<Piece> whitePieces;
+    private final List<Tile> gameBoard;//current board has 64 tiles;
+    private final Collection<Piece> whitePieces; // white pieces on the board
     private final Collection<Piece> blackPieces;
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
-   
+    private final Pawn enPassantPawn; //https://en.wikipedia.org/wiki/En_passant
 
     public Board(final Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -39,8 +40,8 @@ public final class Board {
         this.currentPlayer = builder.nextMoveMaker.choosePlayerByAlliance(this.whitePlayer, this.blackPlayer);
     }
     
-    private final Pawn enPassantPawn;
     
+    // print the board
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -53,7 +54,8 @@ public final class Board {
         }
         return builder.toString();
     }
-
+    
+    //this is just try to print the tile on the board, for example B, if is white, print the B,else print b
     private static String prettyPrint(final Tile tile) {
         if(tile.isTileOccupied()) {
             return tile.getPiece().getPieceAllegiance().isBlack() ?
@@ -61,7 +63,7 @@ public final class Board {
         }
         return tile.toString();
     }
-
+    
     public Collection<Piece> getBlackPieces() {
         return this.blackPieces;
     }
@@ -69,11 +71,13 @@ public final class Board {
     public Collection<Piece> getWhitePieces() {
         return this.whitePieces;
     }
-
+    
+    // get All piece on the board,include white and black pieces
     public Iterable<Piece> getAllPieces() {
         return Iterables.unmodifiableIterable(Iterables.concat(this.whitePieces, this.blackPieces));
     }
-
+    
+    // get All legal moves on the board;
     public Iterable<Move> getAllLegalMoves() {
         return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
@@ -89,11 +93,13 @@ public final class Board {
     public Player currentPlayer() {
         return this.currentPlayer;
     }
-
+    
+    // get tile on the board located at coordinate
     public Tile getTile(final int coordinate) {
         return this.gameBoard.get(coordinate);
     }
-
+    
+    // get the gameboard
     public List<Tile> getGameBoard() {
         return this.gameBoard;
     }
@@ -101,7 +107,9 @@ public final class Board {
     public Pawn getEnPassantPawn() {
         return this.enPassantPawn;
     }
-
+    
+    
+    // create Standard Board to start game;
     public static Board createStandardBoard() {
         final Builder builder = new Builder();
         // Black Layout
@@ -143,7 +151,8 @@ public final class Board {
 
         return builder.build();
     }
-
+    
+    //create a board from the a builder;
     private static List<Tile> createGameBoard(final Builder boardBuilder) {
         final Tile[] tiles = new Tile[BoardUtils.NUM_TILES];
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
@@ -151,7 +160,8 @@ public final class Board {
         }
         return ImmutableList.copyOf(tiles);
     }
-
+    
+    // calculate legal moves of list of pieces
     private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new GapList<>(35);
         for(final Piece piece : pieces) {
@@ -159,7 +169,8 @@ public final class Board {
         }
         return ImmutableList.copyOf(legalMoves);
     }
-
+    
+    // calculate active pieces on the board;
     private static Collection<Piece> calculateActivePieces(final Builder builder,
                                                            final Alliance alliance) {
         final List<Piece> activePieces = new GapList<>(16);
@@ -171,24 +182,11 @@ public final class Board {
         return ImmutableList.copyOf(activePieces);
     }
     
-    private static Collection<Piece> calculateActivePieces(final List<Tile> gameBoard,
-                                                           final Alliance alliance) {
-        final List<Piece> activePieces = new GapList<>(16);
-        for (final Tile tile : gameBoard) {
-            if (tile.isTileOccupied()) {
-                final Piece piece = tile.getPiece();
-                if (piece.getPieceAllegiance() == alliance) {
-                    activePieces.add(piece);
-                }
-            }
-        }
-        return ImmutableList.copyOf(activePieces);
-    }
-
+    //class to build the board;
     public static class Builder {
 
-        Map<Integer, Piece> boardConfig;
-        Alliance nextMoveMaker;
+        Map<Integer, Piece> boardConfig; //Config of the board
+        Alliance nextMoveMaker; 
         Pawn enPassantPawn;
 
         public Builder() {

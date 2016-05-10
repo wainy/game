@@ -12,7 +12,7 @@ import com.chess.engine.board.Move.MajorAttackMove;
 import com.chess.engine.board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import org.magicwerk.brownies.collections.GapList;
-
+//rook class same as bishop
 public final class Rook extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -8, -1, 1, 8 };
@@ -61,15 +61,6 @@ public final class Rook extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
-    @Override
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
-    }
-
-    @Override
-    public int locationBonus() {
-        return this.pieceAlliance.rookBonus(this.piecePosition);
-    }
 
     @Override
     public Rook movePiece(final Move move) {

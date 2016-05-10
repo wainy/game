@@ -12,7 +12,7 @@ import com.chess.engine.board.Move.MajorAttackMove;
 import com.chess.engine.board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import org.magicwerk.brownies.collections.GapList;
-
+// this is class about the piece bishop
 public final class Bishop extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = {-9, -7, 7, 9};
@@ -27,7 +27,9 @@ public final class Bishop extends Piece {
                   final boolean isFirstMove) {
         super(PieceType.BISHOP, alliance, piecePosition, isFirstMove);
     }
-
+    
+    
+    // return all legal moves on the board;
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new GapList<>();
@@ -65,16 +67,6 @@ public final class Bishop extends Piece {
     }
 
     @Override
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
-    }
-
-    @Override
-    public int locationBonus() {
-        return this.pieceAlliance.bishopBonus(this.piecePosition);
-    }
-
-    @Override
     public Bishop movePiece(final Move move) {
         return PieceUtils.getMovedBishop(move);
     }
@@ -83,13 +75,14 @@ public final class Bishop extends Piece {
     public String toString() {
         return this.pieceType.toString();
     }
-
+    //when in first column
     private static boolean isFirstColumnExclusion(final int currentCandidate,
                                                   final int candidateDestinationCoordinate) {
         return (BoardUtils.FIRST_COLUMN[candidateDestinationCoordinate] &&
                 ((currentCandidate == -9) || (currentCandidate == 7)));
     }
-
+    
+    //when in eighth column
     private static boolean isEighthColumnExclusion(final int currentCandidate,
                                                    final int candidateDestinationCoordinate) {
         return BoardUtils.EIGHTH_COLUMN[candidateDestinationCoordinate] &&

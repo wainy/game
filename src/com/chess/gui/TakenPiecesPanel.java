@@ -22,17 +22,18 @@ import com.chess.engine.board.Move;
 import com.chess.engine.pieces.Piece;
 import com.chess.gui.Table.MoveLog;
 import com.google.common.primitives.Ints;
-
+//This class is Taken Pieces Panel on the left of the window
 class TakenPiecesPanel extends JPanel {
 
     private final JPanel northPanel;
     private final JPanel southPanel;
     private static final String pieceIconPath="Icon/";
     private static final long serialVersionUID = 1L;
-    private static final Color PANEL_COLOR = Color.decode("0xFDF5E6");
+    private static final Color PANEL_COLOR = new Color(255,245,230);
     private static final Dimension TAKEN_PIECES_PANEL_DIMENSION = new Dimension(80, 80);
     private static final EtchedBorder PANEL_BORDER = new EtchedBorder(EtchedBorder.RAISED);
-
+    
+    
     public TakenPiecesPanel() {
         super(new BorderLayout());
         setBackground(Color.decode("0xFDF5E6"));
@@ -45,7 +46,7 @@ class TakenPiecesPanel extends JPanel {
         add(this.southPanel, BorderLayout.SOUTH);
         setPreferredSize(TAKEN_PIECES_PANEL_DIMENSION);
     }
-
+    
     public void redo(final MoveLog moveLog) {
         southPanel.removeAll();
         northPanel.removeAll();
@@ -66,20 +67,7 @@ class TakenPiecesPanel extends JPanel {
             }
         }
 
-        Collections.sort(whiteTakenPieces, new Comparator<Piece>() {
-            @Override
-            public int compare(final Piece p1, final Piece p2) {
-                return Ints.compare(p1.getPieceValue(), p2.getPieceValue());
-            }
-        });
-
-        Collections.sort(blackTakenPieces, new Comparator<Piece>() {
-            @Override
-            public int compare(final Piece p1, final Piece p2) {
-                return Ints.compare(p1.getPieceValue(), p2.getPieceValue());
-            }
-        });
-        
+        //Attach piece Icon on the white piece position
         for (final Piece takenPiece : whiteTakenPieces) {
             try {
                 final BufferedImage image = ImageIO.read(new File(pieceIconPath
@@ -94,7 +82,8 @@ class TakenPiecesPanel extends JPanel {
                 e.printStackTrace();
             }
         }
-
+        
+        //Attach piece Icon on the black piece position
         for (final Piece takenPiece : blackTakenPieces) {
             try {
                 final BufferedImage image = ImageIO.read(new File(pieceIconPath

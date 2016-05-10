@@ -13,12 +13,12 @@ import javax.swing.table.DefaultTableModel;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 import com.chess.gui.Table.MoveLog;
-
+// this class is about the history panel on the right of the window;
 class GameHistoryPanel extends JPanel {
 
     private final DataModel model;
     private final JScrollPane scrollPane;
-    private static final Dimension HISTORY_PANEL_DIMENSION = new Dimension(100, 40);
+    private static final Dimension HISTORY_PANEL_DIMENSION = new Dimension(150, 40);
 
     GameHistoryPanel() {
         this.setLayout(new BorderLayout());
@@ -31,7 +31,6 @@ class GameHistoryPanel extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
         this.setVisible(true);
     }
-
     void redo(final Board board,
               final MoveLog moveHistory) {
         int currentRow = 0;
@@ -98,7 +97,8 @@ class GameHistoryPanel extends JPanel {
         }
 
     }
-
+    
+    //this is the history part on the right of the window
     private static class DataModel extends DefaultTableModel {
 
         private final List<Row> values;
@@ -107,7 +107,8 @@ class GameHistoryPanel extends JPanel {
         DataModel() {
             this.values = new ArrayList<>();
         }
-
+        
+        // clear the date
         public void clear() {
             this.values.clear();
             setRowCount(0);

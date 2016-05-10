@@ -12,12 +12,12 @@ import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.magicwerk.brownies.collections.GapList;
-
+// class player
 public abstract class Player {
 
     protected final Board board;
-    protected final King playerKing;
-    protected final Collection<Move> legalMoves;
+    protected final King playerKing;//play's king piece
+    protected final Collection<Move> legalMoves;// play's all legal moves
     private final boolean isInCheck;
 
     Player(final Board board,
@@ -29,31 +29,32 @@ public abstract class Player {
                 Iterables.concat(playerLegals, calculateKingCastles(playerLegals, opponentLegals)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.getPlayerKing().getPiecePosition(), opponentLegals).isEmpty();
     }
-
+    
+    // whether this move is legal move
     public boolean isMoveLegal(final Move move) {
         return !(move.isCastlingMove() && isInCheck()) && this.legalMoves.contains(move);
     }
-
+    // whether the king is in check
     public boolean isInCheck() {
         return this.isInCheck;
     }
-
+    // king is in check and has no move to escape
     public boolean isInCheckMate() {
        return this.isInCheck && !hasEscapeMoves();
     }
-
+    // king is not in check but has no move to do;
     public boolean isInStaleMate() {
         return !this.isInCheck && !hasEscapeMoves();
     }
-
+    // whether it can castling
     public boolean isCastled() {
         return this.playerKing.isCastled();
     }
-
+    // whether king side castling is available 
     public boolean isKingSideCastleCapable() {
         return this.playerKing.isKingSideCastleCapable();
     }
-
+    // whether queen side castling is available
     public boolean isQueenSideCastleCapable() {
         return this.playerKing.isQueenSideCastleCapable();
     }
@@ -62,13 +63,16 @@ public abstract class Player {
     public King getPlayerKing() {
         return this.playerKing;
     }
-
+    
+    // return the information about the player
     public String playerInfo() {
         return ("Player is: " +this.getAlliance() + "\nlegal moves =" + getLegalMoves() + "\ninCheck = " +
                 isInCheck() + "\nisInCheckMate = " +isInCheckMate() +
                 "\nisCastled = " +isCastled())+ "\n";
     }
-
+    
+    
+    
     protected King establishKing() {
         for(final Piece piece : getActivePieces()) {
             if(piece.getPieceType().isKing()) {
@@ -77,7 +81,8 @@ public abstract class Player {
         }
         throw new RuntimeException("Should not reach here! " +this.getAlliance()+ " king could not be established!");
     }
-
+    
+    //whether is has move to escape
     protected boolean hasEscapeMoves() {
         for(final Move move : getLegalMoves()) {
             final MoveTransition transition = makeMove(move);
@@ -92,7 +97,7 @@ public abstract class Player {
         return this.legalMoves;
     }
 
-
+    // calculate all attacks move to this tile
     public static Collection<Move> calculateAttacksOnTile(final int tile,
                                                           final Collection<Move> moves) {
         final List<Move> attackMoves = new GapList<>();
@@ -103,7 +108,7 @@ public abstract class Player {
         }
         return ImmutableList.copyOf(attackMoves);
     }
-
+    
     public MoveTransition makeMove(final Move move) {
         if (!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, Move.MoveStatus.ILLEGAL_MOVE);

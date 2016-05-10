@@ -12,7 +12,7 @@ import com.chess.engine.board.Move.MajorAttackMove;
 import com.chess.engine.board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import org.magicwerk.brownies.collections.GapList;
-
+//Knight pieces same as bishop
 public final class Knight extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
@@ -59,16 +59,6 @@ public final class Knight extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
-    }
-
-    @Override
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
-    }
-
-    @Override
-    public int locationBonus() {
-        return this.pieceAlliance.knightBonus(this.piecePosition);
     }
 
     @Override

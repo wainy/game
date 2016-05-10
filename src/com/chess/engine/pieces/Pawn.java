@@ -10,9 +10,8 @@ import com.chess.engine.board.Move;
 import com.chess.engine.board.Move.*;
 import com.google.common.collect.ImmutableList;
 import org.magicwerk.brownies.collections.GapList;
-
-public final class Pawn
-        extends Piece {
+//pawn class same as bishop
+public final class Pawn extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = {8, 16, 7, 9};
 
@@ -30,11 +29,6 @@ public final class Pawn
     @Override
     public boolean equals(final Object other) {
         return this == other || other instanceof Pawn && (super.equals(other));
-    }
-
-    @Override
-    public int locationBonus() {
-        return this.pieceAlliance.pawnBonus(this.piecePosition);
     }
 
     @Override
@@ -135,11 +129,6 @@ public final class Pawn
             }
         }
         return ImmutableList.copyOf(legalMoves);
-    }
-
-    @Override
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
     }
 
     @Override

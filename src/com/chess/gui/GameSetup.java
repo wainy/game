@@ -11,14 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.player.Player;
 import com.chess.gui.Table.PlayerType;
-
+// this class is the dialog under the options button Setup, when you clicked setup, you can see this dialog window
 public class GameSetup extends JDialog {
 
     private PlayerType whitePlayerType;

@@ -13,6 +13,7 @@ import com.chess.engine.board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import org.magicwerk.brownies.collections.GapList;
 
+//class about the piece King same as bishop
 public final class King extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -9, -8, -7, -1, 1, 7, 8, 9 };
@@ -82,18 +83,8 @@ public final class King extends Piece {
     }
 
     @Override
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
-    }
-
-    @Override
     public String toString() {
         return this.pieceType.toString();
-    }
-
-    @Override
-    public int locationBonus() {
-        return this.pieceAlliance.kingBonus(this.piecePosition);
     }
 
     @Override
@@ -122,7 +113,7 @@ public final class King extends Piece {
         result = 31 * result + (isCastled ? 1 : 0);
         return result;
     }
-
+    //same as in Bishop
     private static boolean isFirstColumnExclusion(final int currentCandidate,
                                                   final int candidateDestinationCoordinate) {
         return BoardUtils.FIRST_COLUMN[currentCandidate]
