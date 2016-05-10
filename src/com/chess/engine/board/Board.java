@@ -55,7 +55,7 @@ public final class Board {
         return builder.toString();
     }
     
-    //this is just try to print the tile on the board, for example B, if is white, print the B,else print b
+    //print the tile on the board, for example B, if is white, print the B,else print b
     private static String prettyPrint(final Tile tile) {
         if(tile.isTileOccupied()) {
             return tile.getPiece().getPieceAllegiance().isBlack() ?
