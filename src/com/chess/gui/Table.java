@@ -134,13 +134,13 @@ public final class Table extends Observable {
         Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
         Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
     }
-
+    //add fileMenu,preferenceMenu,OptionsMenu to the tableMenuBar
     void populateMenuBar(final JMenuBar tableMenuBar) {
         tableMenuBar.add(createFileMenu());
         tableMenuBar.add(createPreferencesMenu());
         tableMenuBar.add(createOptionsMenu());
     }
-
+	//get center of the frame
     static void center(final JFrame frame) {
         final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         final int w = frame.getSize().width;
@@ -331,7 +331,7 @@ public final class Table extends Observable {
         notifyObservers(gameSetup);
     }
     
-    //
+    //Observer to excute AI moves when computer is play the game and game is not end
     private static class TableGameAIWatcher implements Observer {
 
         public void update(final Observable o,
@@ -370,7 +370,7 @@ public final class Table extends Observable {
         COMPUTER
     }
     
-    //Random AI Move
+    //Random AI Move, just select random move from the legal move list
     private static class AIThinkTank extends SwingWorker<Move, String> {
 
         private AIThinkTank() {
@@ -420,9 +420,9 @@ public final class Table extends Observable {
             setBackground(new Color(0,200,0));
             validate();
         }
-
+	// draw the Board
         public void drawBoard(final Board board) {
-            removeAll();
+            removeAll();//First you need to remove all
             for (final TilePanel boardTile : boardDirection.traverse(boardTiles)) {
                 boardTile.drawTile(board);
                 add(boardTile);
